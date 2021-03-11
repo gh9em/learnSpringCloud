@@ -48,7 +48,17 @@
     <dependencies>
                 
       <dependency>
-                      
+
+        <groupId>com.learn.springcloud</groupId>
+
+        <artifactId>base-entities</artifactId>
+
+        <version>${project.version}</version>
+
+      </dependency>
+
+      <dependency>
+        
         <groupId>org.springframework.cloud</groupId>
                       
         <artifactId>spring-cloud-dependencies</artifactId>
@@ -207,7 +217,11 @@
 
   <modules>
 
+    <module>base-entities</module>
+
     <module>cloud-provider-payment8001</module>
+
+    <module>cloud-consumer-order80</module>
 
   </modules>
 
