@@ -5,9 +5,9 @@ spring:
   application.name: cloud-payment-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: 'jdbc:mysql://localhost:3306/eebbk?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
+    url: 'jdbc:mysql://localhost:3306/cloud?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
     username: 'root'
-    password: '123456'
+    password: ''
     type: com.alibaba.druid.pool.DruidDataSource
 
     druid:
