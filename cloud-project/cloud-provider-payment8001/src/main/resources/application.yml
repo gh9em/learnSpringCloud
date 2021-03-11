@@ -1,0 +1,47 @@
+server:
+  port: 8001
+
+spring:
+  application.name: cloud-payment-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 'jdbc:mysql://localhost:3306/eebbk?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
+    username: 'root'
+    password: '123456'
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    druid:
+      initial-size: 1
+      async-init: true
+      validation-query: 'SELECT 1 FROM Dual'
+      time-between-eviction-runs-millis: 120000
+      # IO_max_pool_size should be cpu_physical_core_count * 2 + disk_hit_count
+      # 4 * 2 + 1
+      max-active: 9
+      # combine multi-DruidDataSource Stat logs
+      use-global-data-source-stat: true
+      stat-view-servlet:
+        enabled: true
+        login-username: 'root'
+        login-password: '123456'
+        allow: '192.168.1.1/24,127.0.0.1'
+        reset-enable: 'false'
+        url-pattern: '/druid/*'
+      filter:
+        # SQL logger
+        log4j2:
+          enabled: true
+          result-set-log-enabled: false
+        # SQL inject monitor
+        wall:
+          enabled: true
+          config.multi-statement-allow: true
+        # SQL connect monitor
+        stat:
+          enabled: true
+          merge-sql: true
+          log-slow-sql: true
+
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  type-aliases-package: com.learn.springcloud.entities
