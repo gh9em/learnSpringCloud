@@ -21,7 +21,7 @@ public class PaymentController {
     @PostMapping("/payment/create")
     public CommonResult<Integer> create(Payment payment) {
         int result = paymentService.create(payment);
-        Log.info("create result:" + result);
+        log.info("create result:" + result);
         if (result > 0)
             return new CommonResult<>(200, "success", result);
         else
@@ -31,7 +31,7 @@ public class PaymentController {
     @GetMapping("/payment/{id}")
     public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id) {
         Payment result = paymentService.getPaymentById(id);
-        Log.info("create result:" + result);
+        log.info("create result:" + result);
         if (result != null)
             return new CommonResult<>(200, "success", result);
         else
