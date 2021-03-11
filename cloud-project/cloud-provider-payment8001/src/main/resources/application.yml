@@ -51,7 +51,7 @@ eureka:
     register-with-eureka: true
     # watch registried client count
     fetch-registry: true
+    # value type is map, do not change key name, such as 'defaultZone'
     service-url:
-      # do not change, such as lowwer case 'default-zone'
       defaultZone: http://localhost:7001/eureka/
     
