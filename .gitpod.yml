@@ -3,5 +3,5 @@ image:
 
 tasks:
   - before: 'cd cloud-project'
-    init: 'mvn build'
+    init: 'mvn clean package'
     command: 'mvn spring-boot:run'
