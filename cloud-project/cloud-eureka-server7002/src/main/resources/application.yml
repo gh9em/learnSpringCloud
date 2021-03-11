@@ -1,8 +1,8 @@
 server:
-  port: 7001
+  port: 7002
 
 spring:
-  application.name: cloud-eureka-server7001
+  application.name: cloud-eureka-server7002
 
 eureka:
   instance:
@@ -13,4 +13,4 @@ eureka:
     # value type is map, do not change key name, such as 'defaultZone'
     service-url:
       # single: url->self cluster: urls->others
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
