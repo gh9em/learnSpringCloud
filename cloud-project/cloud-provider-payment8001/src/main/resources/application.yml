@@ -53,5 +53,5 @@ eureka:
     fetch-registry: true
     service-url:
       # do not change, such as lowwer case 'default-zone'
-      defaultZone: http://localhost:7001/eureka
+      defaultZone: http://localhost:7001/eureka/
     
