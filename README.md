@@ -38,3 +38,14 @@
 
     + add dependencies
 
+3. create `application.yml`&Main class
+4. create table
+    ```sql
+    CREATE DATABASE `cloud`;
+    USE `cloud`;
+    CREATE TABLE `payment`(
+        `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+        `serial` varchar(200) DEFAULT '',
+        PRIMARY KEY(`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    ```
