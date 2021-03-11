@@ -2,4 +2,13 @@ server:
   port: 80
 
 spring:
-  application.name: cloud-consumer-order80
+  application.name: cloud-order-service
+
+eureka:
+  client:
+    register-with-eureka: true
+    # watch registried client count
+    fetch-registry: true
+    service-url:
+      # do not change, such as lowwer case 'default-zone'
+      defaultZone: http://localhost:7001/eureka/
