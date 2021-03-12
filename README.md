@@ -98,6 +98,8 @@
                 # lease-renewal-interval-in-seconds: 3
             server:
                 my-url: http://localhost:7001/eureka/
+                # do not remove no-response instances immediately
+                # enable-self-preservation: true
                 # server check is instances timeout interval time
                 # eviction-interval-timer-in-ms: 60000
             #-----↓server & client↓-----
