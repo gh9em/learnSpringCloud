@@ -2,15 +2,20 @@ server:
   port: 7002
 
 spring:
-  application.name: cloud-eureka-server7002
+  application.name: cloud-eureka-service
 
 eureka:
   instance:
+    # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
     hostname: localhost
+  server:
+    my-url: http://localhost:7002/eureka/
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    # set true for replicas available test
+    # register-with-eureka: false
+    # set true for replicas available test
+    # fetch-registry: false
     # value type is map, do not change key name, such as 'defaultZone'
     service-url:
-      # single: url->self cluster: urls->others
-      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      # single: url->self cluster: url->any-other
+      defaultZone: http://localhost:7001/eureka/
