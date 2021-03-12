@@ -3,9 +3,5 @@ image:
 
 tasks:
   - before: 'cd cloud-project'
-<<<<<<< HEAD
-    init: 'mvn build'
-=======
     init: 'mvn clean package'
->>>>>>> gitpod-setup
     command: 'mvn spring-boot:run'
