@@ -48,17 +48,25 @@
         PRIMARY KEY(`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
     ```
-# Eureka Cluster
+# Registry Center
+## Eureka Cluster (AP)
 
-                    |-------------|
-                    |Eureka Server||
-                    |-------------||
-                     |-------------|
-                reg//fetch     reg\\fetch
-    |---------------|     rpc     |---------------|
-    |Consumer Client|>>>>>>>>>>>>>|Provider Server||
-    |---------------|             |---------------||
-                                   |---------------|
+    |-------------------------------------------------------|
+    |Regin                                                  |
+    |   |--------------------------------------------------||
+    |   |Zone             |-------------|                  ||
+    |   |                 |Eureka Server||                 ||
+    |   |                 |-------------||                 ||
+    |   |                  |-------------|                 ||
+    |   |   reg、renew↗↙fetch    reg、renew↖↘fetch      ||
+    |   | |---------------|     rpc     |---------------|  ||
+    |   | |Consumer Client|>>>>>>>>>>>>>|Provider Server|| ||
+    |   | |---------------|             |---------------|| ||
+    |   |                                |---------------| ||
+    |   |                                                  ||
+    |   |--------------------------------------------------||
+    |-------------------------------------------------------|
+
 1. generate eureka server project template(same as sub project)
 2. modify `pom.xml`
 
