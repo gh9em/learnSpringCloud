@@ -47,6 +47,9 @@ mybatis:
   type-aliases-package: com.learn.springcloud.entities
 
 eureka:
+  instance:
+    instance-id: payment8001
+    prefer-ip-address: true
   client:
     register-with-eureka: true
     # watch registried client count
