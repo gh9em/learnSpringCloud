@@ -3,5 +3,5 @@ image:
 
 tasks:
   - before: 'cd cloud-project'
-    init: 'sh /opt/zookeeper/start.sh'
+    init: 'bash /opt/zookeeper/start.sh'
     command: 'mvn clean package'
