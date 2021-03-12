@@ -5,6 +5,7 @@ import com.learn.springcloud.entities.Payment;
 import com.learn.springcloud.service.PaymentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,15 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
+    @Value("${server.port}")
+    private short port;
 
     @PostMapping("/payment/create")
     public CommonResult<Integer> create(Payment payment) {
         int result = paymentService.create(payment);
         log.info("create result:" + result);
         if (result > 0)
-            return new CommonResult<>(200, "success", result);
+            return new CommonResult<>(200, "success, port:" + port, result);
         else
-            return new CommonResult<>(444, "fail");
+            return new CommonResult<>(444, "fail, port:" + port);
     }
 
     @GetMapping("/payment/{id}")
@@ -33,9 +36,9 @@ public class PaymentController {
         Payment result = paymentService.getPaymentById(id);
         log.info("create result:" + result);
         if (result != null)
-            return new CommonResult<>(200, "success", result);
+            return new CommonResult<>(200, "success, port:" + port, result);
         else
-            return new CommonResult<>(444, "fail id-" + id);
+            return new CommonResult<>(444, "fail, port:" + port);
 
     }
 }
