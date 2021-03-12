@@ -50,11 +50,19 @@
     ```
 # Registry Center
 ## Eureka Cluster (AP)
+### Eureka Server Principle
+    |-Eureka Server--------------------------------------------------------------------------------|
+    |         |----------------|            |---------------------|            |------------------||
+    <<export<<|readOnlyCacheMap|<<interval<<|  readWriteCacheMap  |<<interval<<|     registry     ||
+    <<outside<|(ConcurrentMap) |<<refresh<<<|((Guava)LoadingCache)|<<refresh<<<|(InstanceRegistry)||
+    |         |----------------|            |---------------------|            |------------------||
+    |----------------------------------------------------------------------------------------------|
 
-    |-------------------------------------------------------|
-    |Regin                                                  |
+### Eureka Cluster Principle
+    |-Eureka Cluster----------------------------------------|
+    | Regin                                                 |
     |   |--------------------------------------------------||
-    |   |Zone             |-------------|                  ||
+    |   | Zone            |-------------|                  ||
     |   |                 |Eureka Server||                 ||
     |   |                 |-------------||                 ||
     |   |                  |-------------|                 ||
@@ -67,6 +75,7 @@
     |   |--------------------------------------------------||
     |-------------------------------------------------------|
 
+### Usage
 1. generate eureka server project template(same as sub project)
 2. modify `pom.xml`
 
@@ -80,12 +89,17 @@
     + add eureka config
         ```yaml
         eureka:
-            #---------↓server↓---------
             instance:
                 # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
                 hostname: localhost
+                # instance timeout duration
+                # lease-expiration-duration-in-seconds: 90
+                # instance keep-alive interval time
+                # lease-renewal-interval-in-seconds: 3
             server:
                 my-url: http://localhost:7001/eureka/
+                # server check is instances timeout interval time
+                # eviction-interval-timer-in-ms: 60000
             #-----↓server & client↓-----
             client:
                 # set true for replicas available test
