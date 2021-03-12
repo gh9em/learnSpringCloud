@@ -8,8 +8,14 @@ eureka:
   instance:
     # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
     hostname: localhost
+    # instance timeout duration
+    # lease-expiration-duration-in-seconds: 90
+    # instance keep-alive interval time
+    # lease-renewal-interval-in-seconds: 3
   server:
     my-url: http://localhost:7002/eureka/
+    # server check is instances timeout interval time
+    # eviction-interval-timer-in-ms: 60000
   client:
     # set true for replicas available test
     # register-with-eureka: false
