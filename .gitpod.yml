@@ -3,5 +3,5 @@ image:
 
 tasks:
   - before: 'cd cloud-project'
-    init: 'mvn clean package'
-    command: 'mvn spring-boot:run'
+    init: 'bash /opt/zookeeper/start.sh'
+    command: 'mvn clean package'
