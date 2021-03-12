@@ -28,7 +28,7 @@
     ```
     mvn archetype:generate 
     -DgroupId=com.learn.springcloud 
-    -DartifactId=cloud-provider-payment8001
+    -DartifactId=xxx
     -Dversion=1.0-SNAPSHOT 
     -DarchetypeGroupId=org.apache.maven.archetypes 
     -DarchetypeArtifactId=maven-archetype-quickstart 
@@ -36,8 +36,7 @@
     ```
 2. modify `pom.xml`
 
-    + add dependencies
-
+    add dependencies
 3. create `application.yml`&Main class
 4. create table
     ```sql
@@ -49,3 +48,52 @@
         PRIMARY KEY(`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
     ```
+# Eureka Cluster
+
+                    |-------------|
+                    |Eureka Server||
+                    |-------------||
+                     |-------------|
+                reg//fetch     reg\\fetch
+    |---------------|     rpc     |---------------|
+    |Consumer Client|>>>>>>>>>>>>>|Provider Server||
+    |---------------|             |---------------||
+                                   |---------------|
+1. generate eureka server project template(same as sub project)
+2. modify `pom.xml`
+
+    + add dependencies
+        + server: `spring-cloud-starter-netflix-eureka-server`
+        + client: `spring-cloud-starter-netflix-eureka-client`
+
+3. create `application.yml`&Main class
+    
+    + set `spring.application.name`
+    + add eureka config
+        ```yaml
+        eureka:
+            #---------↓server↓---------
+            instance:
+                # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
+                hostname: localhost
+            server:
+                my-url: http://localhost:7001/eureka/
+            #-----↓server & client↓-----
+            client:
+                # set true for replicas available test
+                # register-with-eureka: false
+                # set true for replicas available test
+                # fetch-registry: false
+                # value type is map, do not change key name, such as 'defaultZone'
+                service-url:
+                # single: url->self cluster: url->any-other
+                defaultZone: http://localhost:7002/eureka/
+        ```
+    + add annotations
+        + server: `@EnableEurekaServer`
+        + client: `@EnableEurekaClient`
+
+4. load balance
+    
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+
