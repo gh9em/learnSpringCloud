@@ -246,15 +246,20 @@ Nginx
 # Inside Load Balance(HA)
 ## Ribbon
 ### Ribbon Principle
-1. choose less-use server
+1. choose less-use server from `serverList` which updated by:
+    + schedule task `PingTask` (only support Eureka by default)
+    + schedule task's `UpdateAction`
+    + Eureka notification watcher's `UpdateAction`
 2. choose any node of service name by rule:
-    + RoundRobin(default): round call
-        + Retry: retry round call if no-response
+    + RoundRobin(default, retry count is 10): round call
+        + Retry: retry round call if no-response untill `maxRetryMillis`
         + WeightedResponseTime: response speed weight round call
-    + Random
+    + Random(dead-loop is always no-response)
     + BestAvailableRule
     + AvailabilityFiltering
     + ZoneAvoidance
+    + PredicateBasedRule(abstract for Guava)
+> see https://zhuanlan.zhihu.com/p/262660637, https://www.jianshu.com/p/1bd66db5dc46
 
 ### Usage
 1. modify `pom.xml`
