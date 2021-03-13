@@ -186,8 +186,12 @@ host type (set by command option `agent`):
     | DataCenter      |-------------|                        |
     |                 |Consul Server||                       |
     |                 |-------------||                       |
-    |                  |-------------|                       |
-    | heartbeat↗or↙health-check heartbeat↖or↘health-check |
+    |         ↗Raft↙  |-------------| ↖Raft↘              |
+    |   |-------------|              |-------------|         |
+    |   |Consul Client|              |Consul Client||        |
+    |   |-------------|              |-------------||        |
+    |          ↑  ↓                   |-------------|        |
+    | heartbeat↑or↓health-check    heartbeat↑or↓health-check |
     | |---------------|     rpc     |---------------|        |
     | |Consumer Client|>>>>>>>>>>>>>|Provider Server||       |
     | |---------------|             |---------------||       |
