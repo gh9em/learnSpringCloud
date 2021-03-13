@@ -98,7 +98,7 @@
                 # lease-renewal-interval-in-seconds: 3
             server:
                 my-url: http://localhost:7001/eureka/
-                # do not remove no-response instances immediately
+                # do not remove no-response instances(if more than 85%) immediately
                 # enable-self-preservation: true
                 # server check is instances timeout interval time
                 # eviction-interval-timer-in-ms: 60000
@@ -121,3 +121,51 @@
     
     add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
 
+## Zookeeper Cluster (CP)
+### Zookeeper Server Principle
+host type:
++ Leader (join (ZAB)Paxos-leader/write-campaign: more than 1/2 agree)
++ Learner
+    + Follower (join (ZAB)Paxos-leader/write-campaign)
+    + Observer (no join (ZAB)Paxos-leader/write-campaign)
+
+### Zookeeper Cluster Principle
+                        |-----------------|
+                        |Zk Leader/Learner||
+                        |-----------------||
+                         |-----------------|
+     watch EPHEMERAL↗↙                      ↖↘watch EPHEMERAL
+        |---------------|       rpc        |---------------|
+        |Consumer Client|>>>>>>>>>>>>>>>>>>|Provider Server||
+        |---------------|                  |---------------||
+                                            |---------------|
+
+### Usage
+1. rename `zookeeper/conf/zoo_sample.cfg` to `zoo.cfg`
+2. modify `zoo.cfg`
+
+    + set property `dataDir`
+    + add property `server.n=ip:2181:3888` (n: `hostid`, such as property name `server.0`)
+
+3. mkdir `dataDir`
+4. echo `hostid` > `dataDir/mypid`
+5. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-zookeeper-discovery`
+
+6. create `application.yml`&Main class
+    
+    + set `spring.application.name`
+    + add cloud config
+        ```yaml
+        spring:
+            cloud:
+                zookeeper:
+                    # url1,url2,...
+                    connect-string: localhost:2181
+        ```
+    + add annotation `@EnableDiscoveryClient`
+
+7. load balance
+    
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
