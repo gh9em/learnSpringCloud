@@ -2,6 +2,6 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - before: 'cd cloud-project'
-    init: 'bash /opt/zookeeper/start.sh'
-    command: 'mvn clean package'
+  - before: /opt/zookeeper/start.sh
+    init: 'cd cloud-project && mvn install'
+    command: ''
