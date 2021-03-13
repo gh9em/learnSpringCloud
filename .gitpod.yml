@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - before: /opt/zookeeper/start.sh
+  - before: nohup /opt/consul/consul agent -dev &> /opt/consul/nohup.out& /opt/zookeeper/start.sh
     init: 'cd cloud-project && mvn install'
     command: ''
   - openMode: split-top
