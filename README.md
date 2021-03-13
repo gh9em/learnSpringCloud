@@ -117,7 +117,7 @@
         + server: `@EnableEurekaServer`
         + client: `@EnableEurekaClient`
 
-4. load balance
+4. Ribbon load balance
     
     add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
 
@@ -169,7 +169,7 @@ host type:
         ```
     + add annotation `@EnableDiscoveryClient`
 
-7. load balance
+7. Ribbon load balance
     
     add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
 
@@ -237,6 +237,14 @@ host type (set by command option `agent`):
         ```
     + add annotation `@EnableDiscoveryClient`
 
-4. load balance
+4. Ribbon load balance
     
     add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+
+# Outside Load Balance(HA)
+Nginx
+# Inside Load Balance(HA)
+## Ribbon
+### Ribbon Principle
+1. choose less-use server
+2. choose any node of service name
