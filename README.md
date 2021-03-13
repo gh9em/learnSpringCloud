@@ -244,7 +244,7 @@ host type (set by command option `agent`):
 # Outside Load Balance(HA)
 Nginx
 # Inside Load Balance(HA)
-## Ribbon
+## Ribbon + *RestTemplate*
 ### Ribbon Principle
 1. choose less-use server from `serverList` which updated by:
     + schedule task `PingTask` (only support Eureka by default)
@@ -265,3 +265,46 @@ Nginx
 1. modify `pom.xml`
 
     + add dependencies `spring-cloud-starter-netflix-ribbon`
+
+2. create `application.yml`&Main class
+    + add annotation `@RobbinClient(name = "provider-service-name", configuration = CustomRule.class)` if needed
+        + `provider-service-name` must equals `RestTemplate` request uri
+        + class `CustomRule` **must not define in `@ComponentScan` reaches package**
+    > Ribbon config fields see http://c.biancheng.net/view/5356.html
+
+3. create `CustomRule` class if needed
+4. Ribbon load balance
+    
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+
+# REST Client
+## (Open)Feign + *Ribbon*
+### (Open)Feign Principle
+    |-Consumer Client---------------------|
+    |     @FeignClient                    |
+    |  Java↓Dynamic↑Proxy                 |
+    | RestTemplate ↑                      |
+    |      ↓       ↑                      |
+    |    Feign.Client                     |
+    |      ↓       ↑                      |
+    |    Robbin's LoadBalance             |
+    |-------------------------------------|
+           ↓       ↑
+        |---------------|
+        |Provider Server||
+        |---------------||
+         |---------------|
+
+### Usage
+1. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-openfeign`
+
+2. create `application.yml`&Main class
+    + add annotation `@EnableFeignClients`
+    + add discovery center config, such as `Eureka`
+
+4. (Open)Feign
+    + add annotation **`@FeignClient("provider-service-name")`** on consumer client service
+    + add annotation `@GetMapping` or `@PostMapping` on consumer client service
+
