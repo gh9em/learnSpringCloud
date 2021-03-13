@@ -1,11 +1,21 @@
 server:
-  port: 8004
+  port: 8006
 
 spring:
   application.name: cloud-payment-service
   cloud:
-    zookeeper:
-      connect-string: localhost:2181
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        prefer-ip-address: true
+        # active keep-alive by self
+        # heartbeat.enabled: true
+        # passive keep-alive by server
+        register-health-check: true
+        health-check-interval: 10s
+        health-check-path: /actuator/health
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: 'jdbc:mysql://localhost:3306/cloud?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
