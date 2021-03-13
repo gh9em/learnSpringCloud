@@ -223,8 +223,11 @@
     <module>cloud-provider-payment8002</module>
     
     <module>cloud-provider-payment8004</module>
+    
+    <module>cloud-provider-payment8006</module>
 
     <module>cloud-consumer-order6001</module>
+
     <module>cloud-consumer-order6004</module>
 
     <module>cloud-eureka-server7001</module>
