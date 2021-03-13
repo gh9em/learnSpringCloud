@@ -1,0 +1,9 @@
+server:
+  port: 6004
+
+spring:
+  application.name: cloud-order-service
+  cloud:
+    zookeeper:
+      # url1,url2,...
+      connect-string: localhost:2181

@@ -230,6 +230,8 @@
 
     <module>cloud-consumer-order6004</module>
 
+    <module>cloud-consumer-order6006</module>
+
     <module>cloud-eureka-server7001</module>
     <module>cloud-eureka-server7002</module>
 
