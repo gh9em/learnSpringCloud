@@ -172,3 +172,67 @@ host type:
 7. load balance
     
     add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+
+## Consul Cluster (CP)
+### Consul Server Principle
+host type (set by command option `agent`):
++ Server (join Raft-leader/write-campaign: more than 1/2 agree)
++ Client (no join Raft-leader/write-campaign)
+
+> Raft-leader/write-campaign see: https://www.jianshu.com/p/8e4bbe7e276c
+
+### Consul Cluster Principle
+    |-Consul Cluster-----------------------------------------|
+    | DataCenter      |-------------|                        |
+    |                 |Consul Server||                       |
+    |                 |-------------||                       |
+    |                  |-------------|                       |
+    | heartbeat↗or↙health-check heartbeat↖or↘health-check |
+    | |---------------|     rpc     |---------------|        |
+    | |Consumer Client|>>>>>>>>>>>>>|Provider Server||       |
+    | |---------------|             |---------------||       |
+    |                                |---------------|       |
+    |                                                        |
+    |--------------------------------------------------------|
+
+### Usage
+1. run commands
+    + server: `consul agent -server -bootstrap-expect=n -data-dir=data -node=nodename -bind=ip -client=ip -datacenter=dc1 -ui`
+        + `n` means server replicas count
+        + `-bind=ip` means data exchange ip
+        + `-client=ip` means client(HTTP/DNS/WebUI) access ip
+    + client: `consul agent -data-dir=data -datacenter=dc1`
+    + server&client: `consul join ip` (instead of add option `-join=ip` at start time)
+        + `ip` means any cluster node ip
+
+2. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-consul-discovery`
+
+3. create `application.yml`&Main class
+    
+    + set `spring.application.name`
+    + add cloud config
+        ```yaml
+        spring:
+            cloud:
+                consul:
+                    # consul client host
+                    host: localhost
+                    # consul client port
+                    port: 8500
+                    discovery:
+                        service-name: ${spring.application.name}
+                        prefer-ip-address: true
+                        # active keep-alive by self
+                        # heartbeat.enabled: true
+                        # passive keep-alive by server
+                        register-health-check: true
+                        health-check-interval: 10s
+                        health-check-path: /actuator/health
+        ```
+    + add annotation `@EnableDiscoveryClient`
+
+4. load balance
+    
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
