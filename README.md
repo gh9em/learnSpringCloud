@@ -145,7 +145,10 @@ host type:
 2. modify `zoo.cfg`
 
     + set property `dataDir`
-    + add property `server.n=ip:2181:3888` (n: `hostid`, such as property name `server.0`)
+    + add property `server.n=ip:x:y`
+        + `n` means `hostid`, range is `[1, 255]`
+        + `x` means leader-data-exchange-port
+        + `y` means campaign-port
 
 3. mkdir `dataDir`
 4. echo `hostid` > `dataDir/mypid`
