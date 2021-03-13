@@ -247,4 +247,16 @@ Nginx
 ## Ribbon
 ### Ribbon Principle
 1. choose less-use server
-2. choose any node of service name
+2. choose any node of service name by rule:
+    + RoundRobin(default): round call
+        + Retry: retry round call if no-response
+        + WeightedResponseTime: response speed weight round call
+    + Random
+    + BestAvailableRule
+    + AvailabilityFiltering
+    + ZoneAvoidance
+
+### Usage
+1. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-netflix-ribbon`
