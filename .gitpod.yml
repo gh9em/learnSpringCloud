@@ -2,6 +2,9 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - before: 'cd cloud-project'
-    init: 'bash /opt/zookeeper/start.sh'
-    command: 'mvn clean package'
+  - before: /opt/zookeeper/start.sh
+    init: 'cd cloud-project && mvn install'
+    command: ''
+  - openMode: split-top
+    command: 'echo ---top--- && git log --graph --oneline --all -n1 && echo ---cur--- && git log --graph --oneline HEAD -n1'
+    name: Git Panel
