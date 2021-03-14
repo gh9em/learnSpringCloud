@@ -252,7 +252,7 @@ Nginx
     + Eureka notification watcher's `UpdateAction`
 2. choose any node of service name by rule:
     + RoundRobin(default, retry count is 10): round call
-        + Retry: retry round call if no-response untill `maxRetryMillis`
+        + Retry: retry round call if no-response until `maxRetryMillis`
         + WeightedResponseTime: response speed weight round call
     + Random(dead-loop is always no-response)
     + BestAvailableRule
@@ -270,7 +270,21 @@ Nginx
     + add annotation `@RobbinClient(name = "provider-service-name", configuration = CustomRule.class)` if needed
         + `provider-service-name` must equals `RestTemplate` request uri
         + class `CustomRule` **must not define in `@ComponentScan` reaches package**
-    > Ribbon config fields see http://c.biancheng.net/view/5356.html
+    + add ribbon config
+        ```yaml
+        # provider-service-name must equals `RestTemplate` request uri, if not set means global ribbon config
+        provider-service-name:
+            ribbon:
+                connectTimeout: 2000
+                readTimeout: 5000
+                # retry enable
+                # OkToRetryOnAllOperations: true
+                # each node retry count
+                # MaxAutoRetries: 0
+                # retry node count
+                # MaxAutoRetriesNextServer: 1
+        ```
+    > see http://c.biancheng.net/view/5356.html
 
 3. create `CustomRule` class if needed
 4. Ribbon load balance
@@ -280,15 +294,17 @@ Nginx
 # REST Client
 ## (Open)Feign + *Ribbon*
 ### (Open)Feign Principle
-    |-Consumer Client---------------------|
-    |     @FeignClient                    |
-    |  Java↓Dynamic↑Proxy                 |
-    | RestTemplate ↑                      |
-    |      ↓       ↑                      |
-    |    Feign.Client                     |
-    |      ↓       ↑                      |
-    |    Robbin's LoadBalance             |
-    |-------------------------------------|
+    |-Consumer Client------------------------------|
+    |     @FeignClient                             |
+    |  Java↓Dynamic↑Proxy                          |
+    | RestTemplate ↑                               |
+    |      ↓       ↑                               |
+    |    Feign.Client                              |
+    |      ↓       ↑                               |
+    |    Hystrix's CircuitBreaker(default disable) |
+    |      ↓       ↑                               |
+    |    Robbin's LoadBalance                      |
+    |----------------------------------------------|
            ↓       ↑
         |---------------|
         |Provider Server||
@@ -303,6 +319,18 @@ Nginx
 2. create `application.yml`&Main class
     + add annotation `@EnableFeignClients`
     + add discovery center config, such as `Eureka`
+    + add feign config
+        ```
+        feign:
+            client:
+                config:
+                    # provider-service-name, default means global
+                    default:
+                        connectTimeout: 5000
+                        readTimeout: 5000
+                        # none(default), basic, headers, full
+                        # loggerLevel: none
+        ```
 
 4. (Open)Feign
     + add annotation **`@FeignClient("provider-service-name")`** on consumer client service
