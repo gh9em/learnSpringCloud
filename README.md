@@ -378,3 +378,6 @@ Nginx
 
 3. Hystrix
     + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name")` on **provider** client's controller
+
+> Stress Test: `jmeter -n -t cloud.jmx -l test.jtl`
+
