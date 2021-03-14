@@ -5,3 +5,4 @@
 target/
 .theia/
 *.log
+*.jtl
