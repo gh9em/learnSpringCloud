@@ -30,6 +30,6 @@ RUN mkdir /opt/jmeter &&\
     wget https://downloads.apache.org//jmeter/binaries/apache-jmeter-$JMETER_VERSION.zip -P /opt/jmeter &&\
     unzip /opt/jmeter/apache-jmeter*.zip -d /opt/jmeter/ &&\
     chmod -R 777 /opt/jmeter/
-ENV CLASSPATH "$CLASSPATH:/opt/jmeter/apache-jmeter-$JMETER_VERSION-bin/lib/ext/ApacheJMeter_core.jar:/opt/jmeter/apache-jmeter-$JMETER_VERSION-bin/lib/jorphan.jar"
-ENV PATH "$PATH:/opt/jmeter/apache-jmeter-$JMETER_VERSION-bin/bin"
+ENV CLASSPATH "$CLASSPATH:/opt/jmeter/apache-jmeter-$JMETER_VERSION/lib/ext/ApacheJMeter_core.jar:/opt/jmeter/apache-jmeter-$JMETER_VERSION/lib/jorphan.jar"
+ENV PATH "$PATH:/opt/jmeter/apache-jmeter-$JMETER_VERSION/bin"
 # More information: https://www.gitpod.io/docs/config-docker/
