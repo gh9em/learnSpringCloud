@@ -12,3 +12,14 @@ eureka:
     # value type is map, do not change key name, such as 'defaultZone'
     service-url:
       defaultZone: http://localhost:7001/eureka/
+
+CLOUD-PAYMENT-SERVICE:
+  ribbon:
+    connectTimeout: 2000
+    readTimeout: 5000
+    # retry enable
+    # OkToRetryOnAllOperations: true
+    # each node retry count
+    # MaxAutoRetries: 0
+    # retry node count
+    # MaxAutoRetriesNextServer: 1
