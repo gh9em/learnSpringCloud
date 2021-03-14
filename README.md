@@ -119,7 +119,7 @@
 
 4. Ribbon load balance
     
-    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in **consumer** client
 
 ## Zookeeper Cluster (CP)
 ### Zookeeper Server Principle
@@ -171,7 +171,7 @@ host type:
 
 7. Ribbon load balance
     
-    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in **consumer** client
 
 ## Consul Cluster (CP)
 ### Consul Server Principle
@@ -239,7 +239,7 @@ host type (set by command option `agent`):
 
 4. Ribbon load balance
     
-    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in **consumer** client
 
 # Outside Load Balance(HA)
 Nginx
@@ -289,7 +289,7 @@ Nginx
 3. create `CustomRule` class if needed
 4. Ribbon load balance
     
-    add annotation **`@LoadBalanced`** when registry `RestTemplate` in consumer client
+    add annotation **`@LoadBalanced`** when registry `RestTemplate` in **consumer** client
 
 # REST Client
 ## (Open)Feign + *Ribbon*
@@ -318,6 +318,7 @@ Nginx
 
 2. create `application.yml`&Main class
     + add annotation `@EnableFeignClients`
+    + add annotation `@EnableEurekaClient` if needed
     + add discovery center config, such as `Eureka`
     + add feign config
         ```
@@ -332,7 +333,48 @@ Nginx
                         # loggerLevel: none
         ```
 
-4. (Open)Feign
-    + add annotation **`@FeignClient("provider-service-name")`** on consumer client service
-    + add annotation `@GetMapping` or `@PostMapping` on consumer client service
+3. (Open)Feign
+    + add annotation **`@FeignClient("provider-service-name")`** on **consumer** client's service
+        > also can add a simple fallback to generate self-response
+    + add annotation `@GetMapping` or `@PostMapping` on **consumer** client's service
 
+# Fallback↥ + CircuitBreaker¦+ FlowLimiter⇃
+## Hystrix
+### Hystrix Principle
+    HystrixCommand     HystrixObservableCommand
+     ↓          ↓               (RxJava)
+     ↓          ↓               ↓     ↓↑
+    execute()>>queue()>>>>>observe()>>toObservable()
+                                      ↓↑Y     ↑ ↑
+                                    |-----|   ↑ ↑
+                                    |Cache|   ↑ ↑
+                                    |-----|   ↑ ↑
+                                      ↓↑     getFallback()/resumeWithFallback()
+               Health Info |--------------|N  ↑ ↑
+                  >·>·>·>·>|CircuitBreaker|>>>¦ ↑
+                  ↑        |--------------|     ↑
+                  ↑                   ⇃↑Y       ↑
+                  ↑  |--------------------|N    ↑
+                  ↑·<|Samephore/ThreadPool|>>>>>↥
+         Health Info |--------------------|
+
+> CircuitBreaker principle see https://www.github.com/Netflix/Hystrix/wiki/How-it-Works, https://yq.aliyun.com/articles/679587
+
+### Usage
+1. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-netflix-hystrix`
+
+2. create `application.yml`&Main class
+    + add annotation `@EnableCircuitBreaker`
+    + add annotation `@EnableEurekaClient`
+    + add eureka config
+    + add feign config if needed
+        ```
+        feign:
+            hystrix:
+                enabled: true
+        ```
+
+3. Hystrix
+    + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name")` on **provider** client's controller
