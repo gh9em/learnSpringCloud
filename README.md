@@ -382,12 +382,14 @@ Nginx
 
         hystrix:
           command:
+            # (Open)feign will generate 'className#methodName(param1Type,param2Type,...)' for each api by default, see https://github.com/OpenFeign/feign/blob/master/hystrix/README.md
+            # commandKey, default means global
             default:
               execution.isolation.thread.timeoutInMilliseconds: 2000
         ```
 
 3. Hystrix
-    + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name")` on **provider** client's controller
+    + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name", commandProperties = {@HystrixProperty(name = "prop-key", value = "prop-value")})` on **consumer** client's serivce if needed
 
 > Stress Test: `jmeter -n -t cloud.jmx -l test.jtl`
 
