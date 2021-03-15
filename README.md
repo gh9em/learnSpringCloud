@@ -335,7 +335,12 @@ Nginx
 
 3. (Open)Feign
     + add annotation **`@FeignClient("provider-service-name")`** on **consumer** client's service
-        > also can add a simple fallback to generate self-response
+        > also can add a simple `hystrix` fallback/fallbackFactory to generate self-response if add config
+        >    ```
+        >    feign:
+        >      hystrix:
+        >        enabled: true
+        >    ```
     + add annotation `@GetMapping` or `@PostMapping` on **consumer** client's service
 
 # Fallback↥ + CircuitBreaker¦+ FlowLimiter⇃
@@ -374,6 +379,11 @@ Nginx
         feign:
           hystrix:
             enabled: true
+
+        hystrix:
+          command:
+            default:
+              execution.isolation.thread.timeoutInMilliseconds: 2000
         ```
 
 3. Hystrix
