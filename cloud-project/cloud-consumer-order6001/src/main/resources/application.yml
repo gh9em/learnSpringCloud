@@ -25,6 +25,8 @@ CLOUD-PAYMENT-SERVICE:
     # MaxAutoRetriesNextServer: 1
 
 feign:
+  hystrix:
+    enabled: true
   client:
     config:
       # provider-service-name, default means global; or use feignName: 'provider-service-name' instead
@@ -33,3 +35,8 @@ feign:
         readTimeout: 5000
         # none(default), basic, headers, full
         loggerLevel: full
+
+hystrix:
+  command:
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 5000
