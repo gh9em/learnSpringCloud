@@ -315,6 +315,7 @@ Nginx
 1. modify `pom.xml`
 
     + add dependencies `spring-cloud-starter-openfeign`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client` if needed
 
 2. create `application.yml`&Main class
     + add annotation `@EnableFeignClients`
@@ -378,6 +379,7 @@ Nginx
 1. modify `pom.xml`
 
     + add dependencies `spring-cloud-starter-netflix-hystrix`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client`
 
 2. create `application.yml`&Main class
     + add annotation `@EnableCircuitBreaker`
@@ -426,3 +428,24 @@ Nginx
     <<<<|Handler Mapping|<<|Web Handler|<<|---------------------||<<<<|-------------------------------||
      |  |---------------|  |-----------|   |---------------------|  |  |-------------------------------|
      |--------------------------------------------------------------|
+
+### Usage
+1. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-gateway`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client`
+
+2. create `application.yml`&Main class
+    + add annotation `@EnableEurekaClient`
+    + add eureka config
+    + add gateway config
+        ```
+        spring:
+          cloud:
+            gateway:
+              routes:
+                - id: provider-payment-route
+                  Predicates:
+                    - Path=/payment/**
+                  uri: http://localhost:8001
+        ```

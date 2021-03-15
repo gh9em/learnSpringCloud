@@ -1,0 +1,22 @@
+server:
+  port: 9527
+
+spring:
+  application.name: cloud-gateway-gateway
+  cloud:
+    gateway:
+      routes:
+        # RouteLocator bean
+        - id: provider-payment-route
+          Predicates:
+            - Path=/payment/**
+          uri: http://localhost:8001
+
+eureka:
+  client:
+    register-with-eureka: true
+    # watch registried client count
+    fetch-registry: true
+    # value type is map, do not change key name, such as 'defaultZone'
+    service-url:
+      defaultZone: http://localhost:7001/eureka/

@@ -237,6 +237,8 @@
 
     <module>cloud-hystrix-dashboard9001</module>
 
+    <module>cloud-gateway-gateway9527</module>
+
   </modules>
 
 </project>
