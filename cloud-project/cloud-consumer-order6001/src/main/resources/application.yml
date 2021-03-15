@@ -52,3 +52,6 @@ hystrix:
         errorThresholdPercentage: 50
         # sleep time of circuitBreaker change from OPEN to Half-OPEN status
         sleepWindowInMilliseconds: 10000
+
+# 'hystrix.stream' for support hystrix dashboard
+management.endpoints.web.exposure.include: hystrix.stream, info, health
