@@ -41,4 +41,7 @@ hystrix:
     # (Open)feign will generate 'className#methodName(param1Type,param2Type,...)' for each api by default, see https://github.com/OpenFeign/feign/blob/master/hystrix/README.md
     # commandKey, default means global
     'OrderServiceFeignImpl#slowGetPaymentById(Long)':
-      execution.isolation.thread.timeoutInMilliseconds: 5000
+      execution.isolation:
+        # samephore(immediately reject), thread(thread pool queue)
+        # strategy: thread
+        thread.timeoutInMilliseconds: 5000
