@@ -443,10 +443,14 @@ Nginx
         spring:
           cloud:
             gateway:
+              discovery.locator:
+                # enable lb(LoadBalance) protocol
+                enabled: true
               routes:
                 # RouteLocator bean
                 - id: provider-payment-route
                   Predicates:
                     - Path=/payment/**
-                  uri: http://localhost:8001
+                  # uri: http://localhost:8001
+                  uri: lb://CLOUD-PAYMENT-SERVICE
         ```
