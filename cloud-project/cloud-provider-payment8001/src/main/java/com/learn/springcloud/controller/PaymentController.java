@@ -40,6 +40,11 @@ public class PaymentController {
             return new CommonResult<>(200, "success, port:" + port, result);
         else
             return new CommonResult<>(444, "fail, port:" + port);
+    }
 
+    @GetMapping("/payment/slow/{id}")
+    public CommonResult<Payment> slowGetPaymentById(@PathVariable("id") Long id) throws InterruptedException {
+        Thread.sleep(3000);
+        return getPaymentById(id);
     }
 }
