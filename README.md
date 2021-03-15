@@ -410,5 +410,9 @@ Nginx
 3. Hystrix
     + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name", commandProperties = {@HystrixProperty(name = "prop-key", value = "prop-value"),...})` on **consumer** client's serivce if needed
 
+4. ~~Hystrix Dashboard~~
+    + ~~add dependencies `spring-cloud-starter-netflix-hystrix-dashboard`~~
+    + ~~add annotation `@EnableHystrixDashboard` in Main class~~
+
 > Stress Test: `jmeter -n -t cloud.jmx -l test.jtl`
 
