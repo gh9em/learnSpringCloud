@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient("CLOUD-PAYMENT-SERVICE")
 @Service
-public abstract class OrderServiceFeignImpl implements OrderService {
+public interface OrderServiceFeignImpl extends OrderService {
     @PostMapping("/payment/create")
-    public abstract CommonResult<Integer> create(@RequestBody Payment payment);
+    public CommonResult<Integer> create(@RequestBody Payment payment);
 
     @GetMapping("/payment/{id}")
-    public abstract CommonResult<Payment> getPaymentById(@PathVariable("id") Long id);
+    public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id);
 
     @GetMapping("/payment/slow/{id}")
-    public abstract CommonResult<Payment> slowGetPaymentById(@PathVariable("id") Long id);
+    public CommonResult<Payment> slowGetPaymentById(@PathVariable("id") Long id);
 }
