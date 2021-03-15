@@ -89,29 +89,29 @@
     + add eureka config
         ```yaml
         eureka:
-            instance:
-                # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
-                hostname: localhost
-                # instance timeout duration
-                # lease-expiration-duration-in-seconds: 90
-                # instance keep-alive interval time
-                # lease-renewal-interval-in-seconds: 3
-            server:
-                my-url: http://localhost:7001/eureka/
-                # do not remove no-response instances(if more than 85%) immediately
-                # enable-self-preservation: true
-                # server check is instances timeout interval time
-                # eviction-interval-timer-in-ms: 60000
-            #-----↓server & client↓-----
-            client:
-                # set true for replicas available test
-                # register-with-eureka: false
-                # set true for replicas available test
-                # fetch-registry: false
-                # value type is map, do not change key name, such as 'defaultZone'
-                service-url:
-                # single: url->self cluster: url->any-other
-                defaultZone: http://localhost:7002/eureka/
+          instance:
+            # unique or config unique 'eureka.server.my-url'(see https://www.cnblogs.com/lonelyJay/p/9940199.html, https://blog.csdn.net/ai_xao/article/details/102516384)
+            hostname: localhost
+            # instance timeout duration
+            # lease-expiration-duration-in-seconds: 90
+            # instance keep-alive interval time
+            # lease-renewal-interval-in-seconds: 3
+          server:
+            my-url: http://localhost:7001/eureka/
+            # do not remove no-response instances(if more than 85%) immediately
+            # enable-self-preservation: true
+            # server check is instances timeout interval time
+            # eviction-interval-timer-in-ms: 60000
+          #-----↓server & client↓-----
+          client:
+            # set true for replicas available test
+            # register-with-eureka: false
+            # set true for replicas available test
+            # fetch-registry: false
+            # value type is map, do not change key name, such as 'defaultZone'
+            service-url:
+            # single: url->self cluster: url->any-other
+            defaultZone: http://localhost:7002/eureka/
         ```
     + add annotations
         + server: `@EnableEurekaServer`
@@ -162,10 +162,10 @@ host type:
     + add cloud config
         ```yaml
         spring:
-            cloud:
-                zookeeper:
-                    # url1,url2,...
-                    connect-string: localhost:2181
+          cloud:
+            zookeeper:
+              # url1,url2,...
+              connect-string: localhost:2181
         ```
     + add annotation `@EnableDiscoveryClient`
 
@@ -219,21 +219,21 @@ host type (set by command option `agent`):
     + add cloud config
         ```yaml
         spring:
-            cloud:
-                consul:
-                    # consul client host
-                    host: localhost
-                    # consul client port
-                    port: 8500
-                    discovery:
-                        service-name: ${spring.application.name}
-                        prefer-ip-address: true
-                        # active keep-alive by self
-                        # heartbeat.enabled: true
-                        # passive keep-alive by server
-                        register-health-check: true
-                        health-check-interval: 10s
-                        health-check-path: /actuator/health
+          cloud:
+            consul:
+              # consul client host
+              host: localhost
+              # consul client port
+              port: 8500
+              discovery:
+                service-name: ${spring.application.name}
+                prefer-ip-address: true
+                # active keep-alive by self
+                # heartbeat.enabled: true
+                # passive keep-alive by server
+                register-health-check: true
+                health-check-interval: 10s
+                health-check-path: /actuator/health
         ```
     + add annotation `@EnableDiscoveryClient`
 
@@ -274,15 +274,15 @@ Nginx
         ```yaml
         # provider-service-name must equals `RestTemplate` request uri, if not set means global ribbon config
         provider-service-name:
-            ribbon:
-                connectTimeout: 2000
-                readTimeout: 5000
-                # retry enable
-                # OkToRetryOnAllOperations: true
-                # each node retry count
-                # MaxAutoRetries: 0
-                # retry node count
-                # MaxAutoRetriesNextServer: 1
+          ribbon:
+            connectTimeout: 2000
+            readTimeout: 5000
+            # retry enable
+            # OkToRetryOnAllOperations: true
+            # each node retry count
+            # MaxAutoRetries: 0
+            # retry node count
+            # MaxAutoRetriesNextServer: 1
         ```
     > see http://c.biancheng.net/view/5356.html
 
@@ -323,14 +323,14 @@ Nginx
     + add feign config
         ```
         feign:
-            client:
-                config:
-                    # provider-service-name, default means global
-                    default:
-                        connectTimeout: 5000
-                        readTimeout: 5000
-                        # none(default), basic, headers, full
-                        # loggerLevel: none
+          client:
+            config:
+              # provider-service-name, default means global; or use feignName: 'provider-service-name' instead
+              default:
+                  connectTimeout: 5000
+                  readTimeout: 5000
+                  # none(default), basic, headers, full
+                  # loggerLevel: none
         ```
 
 3. (Open)Feign
@@ -372,8 +372,8 @@ Nginx
     + add feign config if needed
         ```
         feign:
-            hystrix:
-                enabled: true
+          hystrix:
+            enabled: true
         ```
 
 3. Hystrix
