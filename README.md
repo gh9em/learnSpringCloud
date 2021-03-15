@@ -416,3 +416,13 @@ Nginx
 
 > Stress Test: `jmeter -n -t cloud.jmx -l test.jtl`
 
+# Service Gateway
+## Zuul
+## Spring-Cloud-Gateway
+### Spring-Cloud-Gateway Principle
+     |-Spring-Cloud-Gateway(Netty)----------------------------------|
+     |  |---------------|  |-----------|  |---------------------|   | |-------------------------------|
+    >>>>|    Gateway    |>>|  Gateway  |>>|Pre/Post Filter Chain||>>>>|Consumer Client/Provider Server||
+    <<<<|Handler Mapping|<<|Web Handler|<<|---------------------||<<<<|-------------------------------||
+     |  |---------------|  |-----------|   |---------------------|  |  |-------------------------------|
+     |--------------------------------------------------------------|
