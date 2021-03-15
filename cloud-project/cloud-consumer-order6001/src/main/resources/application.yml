@@ -23,3 +23,13 @@ CLOUD-PAYMENT-SERVICE:
     # MaxAutoRetries: 0
     # retry node count
     # MaxAutoRetriesNextServer: 1
+
+feign:
+  client:
+    config:
+      # provider-service-name, default means global; or use feignName: 'provider-service-name' instead
+      CLOUD-PAYMENT-SERVICE:
+        connectTimeout: 5000
+        readTimeout: 5000
+        # none(default), basic, headers, full
+        # loggerLevel: none
