@@ -398,6 +398,13 @@ Nginx
                 # samephore(immediately reject), thread(thread pool queue)
                 # strategy: thread
                 thread.timeoutInMilliseconds: 2000
+              circuitBreaker:
+                enabled: true
+                requestVolumeThreshold: 10
+                # if (requestVolumeThreshold * errorThresholdPercentage% = )5 requests fail circuitBreaker change to OPEN status in each 10 requests
+                errorThresholdPercentage: 50
+                # sleep time of circuitBreaker change from OPEN to Half-OPEN status
+                sleepWindowInMilliseconds: 10000
         ```
 
 3. Hystrix
