@@ -444,6 +444,7 @@ Nginx
           cloud:
             gateway:
               routes:
+                # RouteLocator bean
                 - id: provider-payment-route
                   Predicates:
                     - Path=/payment/**
