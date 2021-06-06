@@ -25,6 +25,8 @@ CLOUD-PAYMENT-SERVICE:
     # MaxAutoRetriesNextServer: 1
 
 feign:
+  hystrix:
+    enabled: true
   client:
     config:
       # provider-service-name, default means global; or use feignName: 'provider-service-name' instead
@@ -32,4 +34,24 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         # none(default), basic, headers, full
-        # loggerLevel: none
+        loggerLevel: full
+
+hystrix:
+  command:
+    # (Open)feign will generate 'className#methodName(param1Type,param2Type,...)' for each api by default, see https://github.com/OpenFeign/feign/blob/master/hystrix/README.md
+    # commandKey, default means global
+    'OrderServiceFeignImpl#slowGetPaymentById(Long)':
+      execution.isolation:
+        # samephore(immediately reject), thread(thread pool queue)
+        # strategy: thread
+        thread.timeoutInMilliseconds: 5000
+      circuitBreaker:
+        enabled: true
+        requestVolumeThreshold: 10
+        # if (requestVolumeThreshold * errorThresholdPercentage% = )5 requests fail circuitBreaker change to OPEN status in each 10 requests
+        errorThresholdPercentage: 50
+        # sleep time of circuitBreaker change from OPEN to Half-OPEN status
+        sleepWindowInMilliseconds: 10000
+
+# 'hystrix.stream' for support hystrix dashboard
+management.endpoints.web.exposure.include: hystrix.stream, info, health

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("CLOUD-PAYMENT-SERVICE")
+@FeignClient(value = "CLOUD-PAYMENT-SERVICE", fallback = OrderServiceFeignFallback.class)
 @Service
 public interface OrderServiceFeignImpl extends OrderService {
     @PostMapping("/payment/create")

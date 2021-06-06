@@ -315,6 +315,7 @@ Nginx
 1. modify `pom.xml`
 
     + add dependencies `spring-cloud-starter-openfeign`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client` if needed
 
 2. create `application.yml`&Main class
     + add annotation `@EnableFeignClients`
@@ -335,7 +336,12 @@ Nginx
 
 3. (Open)Feign
     + add annotation **`@FeignClient("provider-service-name")`** on **consumer** client's service
-        > also can add a simple fallback to generate self-response
+        > also can add a simple `hystrix` fallback/fallbackFactory to generate self-response if add config
+        >    ```
+        >    feign:
+        >      hystrix:
+        >        enabled: true
+        >    ```
     + add annotation `@GetMapping` or `@PostMapping` on **consumer** client's service
 
 # Fallback↥ + CircuitBreaker¦+ FlowLimiter⇃
@@ -358,12 +364,22 @@ Nginx
                   ↑·<|Samephore/ThreadPool|>>>>>↥
          Health Info |--------------------|
 
-> CircuitBreaker principle see https://www.github.com/Netflix/Hystrix/wiki/How-it-Works, https://yq.aliyun.com/articles/679587
+### CircuitBreaker principle
+    -----↓Y          ---↓Y/N
+    ↑    ↓           ↑  ↓    Sleep
+    CLOSED>>>>>>>>>>>OPEN>>>>>>>>>>>Half-OPEN
+         ↑              ↑          Y↓       ↓N
+         ↑              ↑------------       ↓
+         ↑                                  ↓
+         ↑-----------------------------------
+
+> also can see https://www.github.com/Netflix/Hystrix/wiki/How-it-Works, https://yq.aliyun.com/articles/679587
 
 ### Usage
 1. modify `pom.xml`
 
     + add dependencies `spring-cloud-starter-netflix-hystrix`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client`
 
 2. create `application.yml`&Main class
     + add annotation `@EnableCircuitBreaker`
@@ -374,10 +390,67 @@ Nginx
         feign:
           hystrix:
             enabled: true
+
+        hystrix:
+          command:
+            # (Open)feign will generate 'className#methodName(param1Type,param2Type,...)' for each api by default, see https://github.com/OpenFeign/feign/blob/master/hystrix/README.md
+            # commandKey, default means global
+            default:
+              execution.isolation:
+                # samephore(immediately reject), thread(thread pool queue)
+                # strategy: thread
+                thread.timeoutInMilliseconds: 2000
+              circuitBreaker:
+                enabled: true
+                requestVolumeThreshold: 10
+                # if (requestVolumeThreshold * errorThresholdPercentage% = )5 requests fail circuitBreaker change to OPEN status in each 10 requests
+                errorThresholdPercentage: 50
+                # sleep time of circuitBreaker change from OPEN to Half-OPEN status
+                sleepWindowInMilliseconds: 10000
         ```
 
 3. Hystrix
-    + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name")` on **provider** client's controller
+    + add annotation `@HystrixCommand(fallbackMethod="fallback-method-name", commandProperties = {@HystrixProperty(name = "prop-key", value = "prop-value"),...})` on **consumer** client's serivce if needed
+
+4. ~~Hystrix Dashboard~~
+    + ~~add dependencies `spring-cloud-starter-netflix-hystrix-dashboard`~~
+    + ~~add annotation `@EnableHystrixDashboard` in Main class~~
 
 > Stress Test: `jmeter -n -t cloud.jmx -l test.jtl`
 
+# Service Gateway
+## Zuul
+## Spring-Cloud-Gateway
+### Spring-Cloud-Gateway Principle
+     |-Spring-Cloud-Gateway(Netty)----------------------------------|
+     |  |---------------|  |-----------|  |---------------------|   | |-------------------------------|
+    >>>>|    Gateway    |>>|  Gateway  |>>|Pre/Post Filter Chain||>>>>|Consumer Client/Provider Server||
+    <<<<|Handler Mapping|<<|Web Handler|<<|---------------------||<<<<|-------------------------------||
+     |  |---------------|  |-----------|   |---------------------|  |  |-------------------------------|
+     |--------------------------------------------------------------|
+
+### Usage
+1. modify `pom.xml`
+
+    + add dependencies `spring-cloud-starter-gateway`
+    + add dependencies `spring-cloud-starter-netflix-eureka-client`
+
+2. create `application.yml`&Main class
+    + add annotation `@EnableEurekaClient`
+    + add eureka config
+    + add gateway config
+        ```
+        spring:
+          cloud:
+            gateway:
+              discovery.locator:
+                # enable lb(LoadBalance) protocol
+                enabled: true
+              routes:
+                # RouteLocator bean
+                - id: provider-payment-route
+                  Predicates:
+                    - Path=/payment/**
+                  # uri: http://localhost:8001
+                  uri: lb://CLOUD-PAYMENT-SERVICE
+        ```

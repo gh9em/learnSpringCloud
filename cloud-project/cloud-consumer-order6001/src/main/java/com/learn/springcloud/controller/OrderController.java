@@ -5,6 +5,9 @@ import java.util.List;
 import com.learn.springcloud.entities.CommonResult;
 import com.learn.springcloud.entities.Payment;
 import com.learn.springcloud.service.OrderService;
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+@DefaultProperties(defaultFallback = "globalFallback")
 @Slf4j
 @RestController
 public class OrderController {
@@ -36,6 +40,9 @@ public class OrderController {
         return orderService.getPaymentById(id);
     }
 
+    @HystrixCommand(/*fallbackMethod = "slowGetPaymentByIdFallback", */commandProperties = {
+        @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+    })
     @GetMapping("/payment/slow/{id}")
     public CommonResult<Payment> slowGetPaymentById(@PathVariable("id") Long id) {
         return orderService.slowGetPaymentById(id);
@@ -44,5 +51,13 @@ public class OrderController {
     @GetMapping("/instances")
     public List<ServiceInstance> getInstances() {
         return discoveryClient.getInstances(applicationName);
+    }
+
+    public CommonResult<Payment> slowGetPaymentByIdFallback(Long id) {
+        return new CommonResult<>(505, "hystrix fallback id-" + id);
+    }
+
+    public CommonResult<Payment> globalFallback() {
+        return new CommonResult<>(506, "hystrix global fallback");
     }
 }

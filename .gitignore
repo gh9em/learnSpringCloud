@@ -4,5 +4,6 @@
 *.prefs
 target/
 .theia/
+.vscode/
 *.log
 *.jtl
